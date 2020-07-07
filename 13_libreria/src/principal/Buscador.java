@@ -15,7 +15,8 @@ public class Buscador {
 			System.out.println("1. Agregar libro");
 			System.out.println("2. Buscar libro");
 			System.out.println("3. Eliminar libro");
-			System.out.println("4. Salir");
+			System.out.println("4. Mostrar títulos");
+			System.out.println("5. Salir");
 
 			selector = scNros.nextInt();
 
@@ -30,13 +31,24 @@ public class Buscador {
 			case 3:
 				borrarLibros();
 				break;
+			case 4:
+				mostrarTitulos();
+				break;
 			default:
 				System.out.println("Has salido.");
 			}
-		} while (selector != 4);
+		} while (selector != 5);
 		System.out.println("Hasta luego!");
 		scNros.close();
 		scTxt.close();
+	}
+
+	private static void mostrarTitulos() {
+		String[] titulosSeparados = titulos.deleteCharAt(titulos.length() - 1).toString().split(", |,");
+		System.out.println("Estos son los libros de la biblioteca: ");
+		for (String n : titulosSeparados) {
+				System.out.println(n);			
+		}
 	}
 
 	static void buscarLibro() {
