@@ -3,31 +3,28 @@ package principal;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import model.Registro;
+
 public class ProgramaTemperaturas {
 
 	public static void main(String[] args) {
-		// 1. Nueva temperatura
-		// 2. Temperatura media
-		// 3. Temperaturas extremas
-		// 4. Mostrar todas
-		// 0. Salir
 		int selector = 0;
-		ArrayList<Double> temperaturas = new ArrayList<>();
-		Scanner scNros = new Scanner(System.in);
+		ArrayList<Registro> temperaturas = new ArrayList<>();
+		Scanner sc = new Scanner(System.in);
 		
 	do {	
 		menu();
-		selector = scNros.nextInt();
+		selector = Integer.parseInt(sc.nextLine());
 		switch (selector) {
 		case 1:
-			agregarTemperatura(temperaturas);
-			System.out.println("Has añadido un dato de temperatura.");
+			agregarTemperatura(temperaturas);			
 			break;
 		case 2:
 			mostrarMedia(temperaturas);
 			break;
 		case 3:
-			mostrarExtremos(temperaturas);
+			mostrarMayor(temperaturas);
+			mostrarMenor(temperaturas);
 			break;
 		case 4:
 			mostrarTodas(temperaturas);
@@ -40,38 +37,71 @@ public class ProgramaTemperaturas {
 		}
 		
 	}while (selector!=0);
-	scNros.close();
+	sc.close();
 	}
 	
-	static void mostrarTodas(ArrayList<Double> temperaturas) {
+	static void mostrarTodas(ArrayList<Registro> temperaturas) {
 		System.out.println("Temperaturas registradas: ");
-		for (Double n:temperaturas) {
-			System.out.println(n+" grados.");
+		for (Registro r:temperaturas) {
+			System.out.print("Ciudad: "+r.getCiudad()+" con ");
+			System.out.println(r.getTemperatura()+" grados.");
 		}			
 	}
 
-	static void mostrarExtremos(ArrayList<Double> temperaturas) {
-		double max=temperaturas.get(0);
-		double min=temperaturas.get(0);
-		for (Double n:temperaturas) {
-			max=(n>max)?n:max;
-			min=(n<min)?n:min;
+	static Registro mostrarMenor(ArrayList<Registro> temperaturas) {
+		Registro menor = temperaturas.get(0);
+		double min=temperaturas.get(0).getTemperatura();
+		for (Registro r:temperaturas) {
+			min=(r.getTemperatura()<min)?r.getTemperatura():min;
+			menor=r; //FIXME reemplazar el ternario por un if, porque si no, siempre carga acá el último registro
 		}
-		System.out.println("La temperatura máxima ha sido: "+max+" grados y la mínima: "+min+" grados.");
+		System.out.println("La temperatura mínima ha sido: "+menor.getTemperatura()+" grados en la ciudad "+menor.getCiudad());
+		return menor;
+	}
+	
+	static Registro mostrarMayor(ArrayList<Registro> temperaturas) {
+		Registro mayor = temperaturas.get(0);
+		double max=temperaturas.get(0).getTemperatura();
+		for (Registro r:temperaturas) {
+			max=(r.getTemperatura()>max)?r.getTemperatura():max;
+			mayor=r; //FIXME reemplazar el ternario por un if, porque si no, siempre carga acá el último registro
+		}
+		System.out.println("La temperatura máxima ha sido: "+mayor.getTemperatura()+" grados en la ciudad "+mayor.getCiudad());
+		return mayor;
 	}
 
-	static void mostrarMedia(ArrayList<Double> temperaturas) {
+	static void mostrarMedia(ArrayList<Registro> temperaturas) {
 		double suma=0;		
-		for (Double n:temperaturas) {
-			suma+=n;
+		for (Registro r:temperaturas) {
+			suma+=r.getTemperatura();
 		}
 		System.out.println("Esta es la media de temperaturas: "+suma/temperaturas.size());
 	}
 
-	static void agregarTemperatura(ArrayList<Double> temperaturas) {
-		System.out.println("Añade una temperatura: ");		
-		Scanner scNros = new Scanner(System.in);
-		temperaturas.add(scNros.nextDouble());		
+	static void agregarTemperatura(ArrayList<Registro> temperaturas) {
+		Scanner sc = new Scanner(System.in);		
+		String ciudadNueva;
+		
+		System.out.println("Añade una ciudad: ");
+		ciudadNueva=sc.nextLine();
+		if (!hayCiudad(temperaturas, ciudadNueva)) {
+			System.out.println("Añade una temperatura: ");		
+			Double temperatura = Double.parseDouble(sc.nextLine());
+			Registro r1 = new Registro(temperatura,ciudadNueva);
+			temperaturas.add(r1);
+			System.out.println("Has añadido un dato de temperatura.");
+		} else {
+			System.out.println("Ya has ingresado registros de esa ciudad, prueba otra...");
+		}
+	}
+	
+	static boolean hayCiudad (ArrayList<Registro> temperaturas, String ciudadNueva) {
+		for (Registro r : temperaturas) {
+			if (r.getCiudad().equalsIgnoreCase(ciudadNueva)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	static void menu() {
