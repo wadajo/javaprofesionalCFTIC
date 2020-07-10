@@ -15,21 +15,25 @@ public class CuentaServiceLimite extends CuentaService {
 	}
 	
 	@Override
-	public void extraer (double cantidad) {
+	public double extraer (double cantidad) {
 		if (cantidad<=limite) {
 			super.extraer(cantidad);
+			return cantidad;
 		} else {
 			super.extraer(limite);
 			System.out.println("Has superado tu límite. Solo has retirado "+limite+" euros.");
+			return limite;
 		}
 	}
 	@Override
-	public void ingresar (double cantidad) {
+	public double ingresar (double cantidad) {
 		if (cantidad<=limite) {
-			super.ingresar(cantidad);			
+			super.ingresar(cantidad);
+			return cantidad;
 		} else {
 			super.ingresar(limite);
 			System.out.println("Has superado tu límite. Solo has ingresado "+limite+" euros.");
+			return limite;
 		}
 	}
 	public double getLimite() {
