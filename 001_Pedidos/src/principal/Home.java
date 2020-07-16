@@ -1,8 +1,6 @@
 package principal;
 
-import java.util.ArrayList;
 import java.util.Scanner;
-import model.Pedido;
 import service.PedidosService;
 
 public class Home {
@@ -28,13 +26,16 @@ public class Home {
 				servicio.agregarPedido(id, producto, precio);
 				break;
 			case 2:
-				System.out.println("Se ha procesado el primer pedido en la cola, cuyo Código era "+servicio.procesarPedido().getId());
+				servicio.procesarPedido();
 				break;
 			case 3:
-				//priorizar pedido
+				System.out.println("Introduce el Código del pedido a priorizar: ");
+				String idAPriorizar = sc.nextLine();
+				servicio.priorizarPedido(idAPriorizar);
+				System.out.println("Has priorizado el Pedido "+idAPriorizar);
 				break;
 			case 4:
-				 //mostrar total de precios sumados de los productos de la cola
+				 System.out.println("La facturación pendiente es de "+servicio.facturacionPendiente()+" euros.");
 				break;
 			case 5:
 				System.out.println("Pedidos pendientes: ");
@@ -43,7 +44,7 @@ public class Home {
 			case 6:
 				System.out.println("Introduce el código del pedido a procesar: ");
 				String idAProcesar = sc.nextLine();
-				if (servicio.procesarPedido(idAProcesar)) {
+				if (servicio.procesarPedidoXId(idAProcesar)) {
 					System.out.println("Se ha procesado el Pedido: "+idAProcesar);
 				} else {
 					System.out.println("No se ha podido procesar el Pedido: "+idAProcesar);
@@ -52,7 +53,7 @@ public class Home {
 			case 7:	
 				System.out.println("Introduce parte del nombre de los productos a procesar: ");
 				String producto2 = sc.nextLine();
-				servicio.procesarPedidoProducto(producto2);
+				servicio.procesarPedidoXProducto(producto2);
 				break;
 			case 0:
 				System.out.println("Has salido. ¡Hasta luego!");
